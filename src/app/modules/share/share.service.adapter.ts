@@ -10,7 +10,8 @@ export default class ShareServiceAdapter {
         this.vm.isLoading = true;
         this.vm.currentDirectory = await this.getHomeDirectory();
         this.vm.directoryNavigationStack.push(this.vm.currentDirectory);
-        let result = await Promise.all([this.getCurrentDirectory()]);
+        let result = await Promise.all([this.getCurrentDirectory(), this.getConfig()]);
+        console.log(result);
         this.vm.directoryData = result[0];
         this.vm.shareStatusList = new Array<boolean>(result[0].length).fill(false);
         this.vm.isLoading = false;
@@ -37,6 +38,18 @@ export default class ShareServiceAdapter {
     async isPathValid(path: string): Promise<boolean> {
         return await invoke<boolean>("generic_handler", {
             args: ["is_path_valid", path],
+        });
+    }
+    async applyShare(): Promise<void> {
+        let result = await invoke<boolean>("generic_handler", {
+            args: ["update_share_at_path", this.vm.currentDirectory, this.vm.shareStatusList],
+        });
+        result ? alert("updated successfully") : alert("please try again");
+    }
+
+    async getConfig(): Promise<{[key: string]: Array<string>}> {
+        return await invoke<{[key: string]: Array<string>}>("generic_handler", {
+            args: ["get_config"],
         });
     }
 }

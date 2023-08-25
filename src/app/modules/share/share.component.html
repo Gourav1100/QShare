@@ -39,6 +39,7 @@
                 </form>
             </div>
             <div
+                (click)="serviceAdapter.applyShare()"
                 *ngIf="shareStatusCount > 0"
                 class="material-icons h-fit cursor-pointer p-1 rounded-full border border-gray-600 hover:border-gray-800 hover:text-white hover:bg-gray-600 transition-all"
                 matTooltip="Apply Changes"
