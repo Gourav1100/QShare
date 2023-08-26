@@ -1,3 +1,4 @@
+use super::config_handler::{get_config, set_config, Config};
 use serde::Serialize;
 use std::env;
 use std::fs;
@@ -5,7 +6,8 @@ use std::fs;
 pub enum HandlerResult {
     DirectoryResult(Vec<(String, bool)>),
     StringResult(String),
-    BooleanResult(bool)
+    BooleanResult(bool),
+    SharedResult(Config),
 }
 
 impl Serialize for HandlerResult {
@@ -17,6 +19,7 @@ impl Serialize for HandlerResult {
             HandlerResult::DirectoryResult(vec) => vec.serialize(serializer),
             HandlerResult::StringResult(string) => string.serialize(serializer),
             HandlerResult::BooleanResult(boolean) => boolean.serialize(serializer),
+            HandlerResult::SharedResult(config) => config.serialize(serializer),
         }
     }
 }
@@ -29,6 +32,31 @@ pub fn generic_handler(mut args: Vec<String>) -> Box<HandlerResult> {
         "list_directory" => list_directory(args[0].clone()),
         "get_home_directory" => get_home_directory(),
         "is_path_valid" => is_path_valid(args[0].clone()),
+        "get_config" => {
+            let response = get_config();
+            if let Ok(result) = response {
+                Box::new(HandlerResult::SharedResult(result))
+            } else {
+                let e = response.err().unwrap();
+                Box::new(HandlerResult::StringResult(e.to_string()))
+            }
+        }
+        "set_config" => {
+            let parse_result = serde_json::from_str(&args[0]);
+            if parse_result.is_err() {
+                return Box::new(HandlerResult::StringResult(
+                    parse_result.err().unwrap().to_string(),
+                ))
+            }
+            let config: Config = parse_result.unwrap();
+            let response = set_config(config);
+            if response.is_err() {
+                return Box::new(HandlerResult::StringResult(
+                    response.err().unwrap().to_string(),
+                ));
+            }
+            Box::new(HandlerResult::BooleanResult(true))
+        }
         _ => todo!(),
     }
 }
@@ -72,7 +100,6 @@ fn is_path_valid(path: String) -> Box<HandlerResult> {
         return Box::new(HandlerResult::BooleanResult(false));
     } else if !path.unwrap().is_dir() {
         return Box::new(HandlerResult::BooleanResult(false));
-        
     }
     Box::new(HandlerResult::BooleanResult(true))
 }
