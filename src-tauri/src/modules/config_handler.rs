@@ -5,7 +5,7 @@ use std::{env, fs};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
-    shared: HashMap<String, bool>,
+    shared: HashMap<String, i32>,
 }
 
 pub fn get_config() -> Result<Config, &'static str> {
@@ -30,13 +30,14 @@ pub fn set_config(object: Config) -> Result<bool, String> {
     if is_valid_path.is_err() {
         return Err(is_valid_path.err().unwrap().to_string());
     }
-    let file_handler = fs::File::open(config_path + "config.json");
+    let file_handler = fs::File::create(config_path + "config.json");
     if file_handler.is_err() {
         return Err("Error opening config file.".to_string());
     }
     let mut file = file_handler.unwrap();
     let response = file.write_all(serde_json::to_string(&object).unwrap().as_bytes());
     if response.is_err() {
+        println!("{}", response.err().unwrap().to_string());
         return Err("Error writing config file.".to_string());
     }
     Ok(true)

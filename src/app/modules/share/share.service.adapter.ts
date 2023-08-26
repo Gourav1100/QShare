@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api";
 import { ShareComponent } from "./share.component";
+import { Config } from "../types/config";
 
 export default class ShareServiceAdapter {
     vm: ShareComponent;
@@ -11,9 +12,8 @@ export default class ShareServiceAdapter {
         this.vm.currentDirectory = await this.getHomeDirectory();
         this.vm.directoryNavigationStack.push(this.vm.currentDirectory);
         let result = await Promise.all([this.getCurrentDirectory(), this.getConfig()]);
-        console.log(result);
-        this.vm.directoryData = result[0];
-        this.vm.shareStatusList = new Array<boolean>(result[0].length).fill(false);
+        [this.vm.directoryData, this.vm.config] = result;
+        this.vm.config_original = JSON.parse(JSON.stringify(this.vm.config));
         this.vm.isLoading = false;
     }
 
@@ -41,14 +41,16 @@ export default class ShareServiceAdapter {
         });
     }
     async applyShare(): Promise<void> {
-        let result = await invoke<boolean>("generic_handler", {
-            args: ["update_share_at_path", this.vm.currentDirectory, this.vm.shareStatusList],
+        let result = await invoke<boolean | string>("generic_handler", {
+            args: ["set_config", JSON.stringify(this.vm.config)],
         });
-        result ? alert("updated successfully") : alert("please try again");
+        result == true ? alert("updated successfully") : alert("please try again");
+        result == true ? null : console.log(result);
+        this.vm.config_original = this.vm.config;
     }
 
-    async getConfig(): Promise<{[key: string]: Array<string>}> {
-        return await invoke<{[key: string]: Array<string>}>("generic_handler", {
+    async getConfig(): Promise<Config> {
+        return await invoke<Config>("generic_handler", {
             args: ["get_config"],
         });
     }

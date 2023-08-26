@@ -1,12 +1,12 @@
 <div class="w-full h-full" *ngIf="isLoading">
     <app-spinner></app-spinner>
 </div>
-<div class="w-full h-full overflow-y-auto p-3 select-none" *ngIf="!isLoading">
+<div class="w-full h-full overflow-y-auto p-3 pt-0 mt-3 select-none" *ngIf="!isLoading">
     <div class="w-full flex flex-wrap">
         <div
-            class="w-full p-1 m-1 flex text-gray-400"
+            class="w-full p-1 flex text-gray-400 sticky top-0 bg-white z-10 rounded drop-shadow-lg"
             [class]="[
-                shareStatusCount > 0 && directoryNavigationStack.length <= 1 ? 'justify-end' : '',
+                !checkConfig() && directoryNavigationStack.length <= 1 ? 'justify-end' : '',
                 directoryNavigationStack.length > 1 ? 'justify-between' : ''
             ]"
         >
@@ -40,7 +40,7 @@
             </div>
             <div
                 (click)="serviceAdapter.applyShare()"
-                *ngIf="shareStatusCount > 0"
+                *ngIf="!checkConfig()"
                 class="material-icons h-fit cursor-pointer p-1 rounded-full border border-gray-600 hover:border-gray-800 hover:text-white hover:bg-gray-600 transition-all"
                 matTooltip="Apply Changes"
                 matTooltipPosition="left"
@@ -58,11 +58,24 @@
                     class="flex-grow flex items-center"
                     (click)="!item[1] ? toggleShare(_index) : navigateDirectory(item[0])"
                 >
-                    <div class="material-icons">{{ item[1] ? "folder" : "description" }}</div>
+                    <div class="material-icons">
+                        {{
+                            item[1]
+                                ? config_original.shared[item[0]]
+                                    ? "folder_shared"
+                                    : "folder"
+                                : config_original.shared[item[0]]
+                                ? "contact_page"
+                                : "description"
+                        }}
+                    </div>
                     <div class="ml-2 text-base">{{ processTitle(item[0]) }}</div>
                 </div>
                 <div class="w-fit">
-                    <mat-checkbox [checked]="shareStatusList[_index]" (click)="toggleShare(_index)"></mat-checkbox>
+                    <mat-checkbox
+                        [checked]="config.shared[item[0]] != undefined"
+                        (click)="toggleShare(_index)"
+                    ></mat-checkbox>
                 </div>
             </div>
         </div>
