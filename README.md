@@ -10,6 +10,7 @@ Install dependencies and run the script.
 yarn install
 ./run
 ````
+#### Uncomment lines in run file to enable backtracing (partial/full).
 
 # Guides / Docs
 1. [Tauri Guide](https://tauri.app/v1/guides/)
