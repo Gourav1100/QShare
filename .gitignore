@@ -44,3 +44,6 @@ Thumbs.db
 # Cache
 .angular
 .vscode
+
+# cpp builds
+**/*.cpp.out
