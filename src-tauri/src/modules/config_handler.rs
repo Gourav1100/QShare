@@ -5,7 +5,8 @@ use std::{env, fs};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
-    shared: HashMap<String, i32>,
+    pub shared: HashMap<String, i32>,
+    pub approved: HashMap<String, bool>,
 }
 
 pub fn get_config() -> Result<Config, &'static str> {
@@ -78,6 +79,7 @@ fn validate_directory(path: String) -> Result<bool, String> {
             Ok(_) => {
                 let initialization_object = serde_json::to_string(&Config {
                     shared: HashMap::new(),
+                    approved: HashMap::new(),
                 });
                 if initialization_object.is_err() {
                     return Err("Error initializing config file.".to_string());

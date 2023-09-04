@@ -13,9 +13,11 @@ export class ShareComponent implements OnInit {
     directoryNavigationStack: Array<string> = [];
     config: Config = {
         shared: {},
+        approved: {},
     };
     config_original: Config = {
         shared: {},
+        approved: {},
     };
     currentDirectory: string = "";
     serviceAdapter!: ShareServiceAdapter;

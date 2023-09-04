@@ -1,8 +1,8 @@
 use super::config_handler::{get_config, set_config, Config};
+use super::socket_handler::respond_and_update_authentication_status;
 use serde::Serialize;
 use std::env;
 use std::fs;
-
 pub enum HandlerResult {
     DirectoryResult(Vec<(String, bool)>),
     StringResult(String),
@@ -46,7 +46,7 @@ pub fn generic_handler(mut args: Vec<String>) -> Box<HandlerResult> {
             if parse_result.is_err() {
                 return Box::new(HandlerResult::StringResult(
                     parse_result.err().unwrap().to_string(),
-                ))
+                ));
             }
             let config: Config = parse_result.unwrap();
             let response = set_config(config);
@@ -57,6 +57,9 @@ pub fn generic_handler(mut args: Vec<String>) -> Box<HandlerResult> {
             }
             Box::new(HandlerResult::BooleanResult(true))
         }
+        "update_status" => Box::new(HandlerResult::BooleanResult(
+            respond_and_update_authentication_status(args[0].parse().unwrap(), args[1].clone()),
+        )),
         _ => todo!(),
     }
 }

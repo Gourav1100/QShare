@@ -1,4 +1,4 @@
-use tauri::{WindowMenuEvent};
+use tauri::WindowMenuEvent;
 
 // Function to handle events
 pub fn handle_event(event: &WindowMenuEvent) {
@@ -14,8 +14,8 @@ pub fn handle_event(event: &WindowMenuEvent) {
         "help" => {
             event.window().emit("help", "This is the help event.").unwrap();
         },
-        "open" => {
-            event.window().emit("open", "This is the open event.").unwrap();
+        "share" => {
+            event.window().emit("share", "This is the share event.").unwrap();
         },
         _ => {}
     }

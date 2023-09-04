@@ -1,0 +1,10 @@
+:host {
+    display: flex;
+    user-select: none;
+    font-family: monospace;
+    font-weight: 600;
+}
+
+.message-container {
+    color: white;
+}

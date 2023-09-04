@@ -1,0 +1,15 @@
+<span class="message-container" matSnackBarLabel> {{ data.message }} </span>
+<span matSnackBarActions class="w-fit bg-none">
+    <button
+        (click)="updateRequestStatus(true)"
+        class="material-icons text-green-400 p-1 mr-1 ml-1 rounded-full hover:text-green-600 bg-none border-none outline-none"
+    >
+        check
+    </button>
+    <button
+        (click)="updateRequestStatus(false)"
+        class="material-icons text-red-400 p-1 mr-1 rounded-full hover:text-red-600 bg-none border-none outline-none"
+    >
+        clear
+    </button>
+</span>

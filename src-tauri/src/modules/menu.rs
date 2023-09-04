@@ -3,7 +3,7 @@ use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 // Menu components
 pub fn init_menu() -> Menu {
     // submenu for file
-    let open = CustomMenuItem::new("open".to_string(), "Open");
+    let open = CustomMenuItem::new("share".to_string(), "Share");
     let close = CustomMenuItem::new("close".to_string(), "Close");
     let submenu_file = Submenu::new("File", Menu::new().add_item(open).add_item(close));
     // submenu for about

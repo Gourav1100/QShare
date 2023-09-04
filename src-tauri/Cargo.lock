@@ -2146,6 +2146,7 @@ name = "qshare"
 version = "0.0.1"
 dependencies = [
  "if-addrs",
+ "lazy_static",
  "serde",
  "serde_json",
  "tauri",

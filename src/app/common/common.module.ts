@@ -10,12 +10,15 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { FormsModule } from "@angular/forms";
+import { MatSnackBarModule} from '@angular/material/snack-bar';
 // components
 import { SpinnerComponent } from "./spinner/spinner.component";
+import { NotificationComponent } from "./notification/notification.component";
 
 @NgModule({
-    declarations: [SpinnerComponent],
+    declarations: [SpinnerComponent, NotificationComponent],
     imports: [
+        MatSnackBarModule,
         MatSidenavModule,
         MatCardModule,
         MatProgressSpinnerModule,
@@ -28,6 +31,7 @@ import { SpinnerComponent } from "./spinner/spinner.component";
         FormsModule,
     ],
     exports: [
+        MatSnackBarModule,
         SpinnerComponent,
         MatSidenavModule,
         MatCardModule,

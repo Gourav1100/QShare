@@ -14,7 +14,7 @@ int main() {
 
     sockaddr_in serverAddr{};
     serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(8080);  // Replace with the port your Rust server is listening on
+    serverAddr.sin_port = htons(8080);
     inet_pton(AF_INET, "127.0.0.1", &(serverAddr.sin_addr));
 
     if (connect(clientSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == -1) {
@@ -22,13 +22,15 @@ int main() {
         return 1;
     }
 
-    std::string message = "Hello from C++ client!";
+    std::string message = "authorize";
     send(clientSocket, message.c_str(), message.size(), 0);
 
     char buffer[1024] = {0};
     recv(clientSocket, buffer, sizeof(buffer), 0);
     std::cout << "Server says: " << buffer << std::endl;
-
+    
+    message = "exit";
+    send(clientSocket, message.c_str(), message.size(), 0);
     close(clientSocket);
     return 0;
 }

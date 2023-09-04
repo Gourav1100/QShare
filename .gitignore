@@ -46,4 +46,4 @@ Thumbs.db
 .vscode
 
 # cpp builds
-**/*.cpp.out
+**/*.out
